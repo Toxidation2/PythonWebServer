@@ -19,7 +19,7 @@ It's a short version of PythonWebServer, at least in this case.
 
 ## PWS 2.0?
 
-PWS 2.0 and PyBB 2.0 will be released later on
+PWS 2.0 and PBB 2.0 will be released later on
 
 ## PythonBulletinBoard (or PBB)?
 
