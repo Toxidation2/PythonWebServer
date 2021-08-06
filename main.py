@@ -3,7 +3,7 @@ from io import StringIO
 import sys
 import os
 
-hostName = "0.0.0.0"
+hostName = "127.0.0.1"
 serverPort = 80
 htDocsDir = "htdocs"
 defaultDocuments = ["index.py", "index.html"]
@@ -17,11 +17,9 @@ indexingEnabled = False
 
 class MyServer(BaseHTTPRequestHandler):
     def do_GET(self):
-        print(self.path)
         if os.path.isdir(htDocsDir + self.path):
             oldDefaultDocument = None
             for newDefaultDocument in defaultDocuments:
-                print(htDocsDir + self.path + "/" + newDefaultDocument)
                 if os.path.isfile(htDocsDir + self.path + "/" + newDefaultDocument):
                     oldDefaultDocument = htDocsDir + self.path + "/" + newDefaultDocument
                     break
@@ -45,7 +43,6 @@ class MyServer(BaseHTTPRequestHandler):
                     exec(content)
                     sys.stdout = old_stdout
                     content = mystdout.getvalue()
-                    print(content)
                     self.send_response(200)
                     self.send_header("Content-Type", "text/html")
                     self.end_headers()
@@ -134,7 +131,6 @@ class MyServer(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":        
     webServer = HTTPServer((hostName, serverPort), MyServer)
-    print("Server started http://%s:%s" % (hostName, serverPort))
 
     try:
         webServer.serve_forever()
@@ -142,4 +138,3 @@ if __name__ == "__main__":
         pass
 
     webServer.server_close()
-    print("Server stopped.")
