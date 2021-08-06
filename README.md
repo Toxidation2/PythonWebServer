@@ -5,7 +5,7 @@ A web server made in Python
 
 ## Installation instructions
 
-Just run main.py and go to 127.0.0.1 in your browser of choice and you should see a example home page! If you see it, this means that PythonWebServer has successfully been installed! You can now replace the index.py file with your own home page of choice.
+Just run main.py and go to 127.0.0.1 in your browser of choice and you should see a example home page! You can now replace the index.py file with your own home page of choice. (note that I would not recommend using this for public use, private use is fine, as there is probably major insecurities, and there's no POST request support as of right now, so use this at your own risk if you're gonna use it for public use)
 
 ## Live demonstration
 
