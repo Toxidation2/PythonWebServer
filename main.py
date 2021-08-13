@@ -14,20 +14,7 @@ types = [
     ["text/html", "html"]
 ]
 defaultType = "text/plain"
-indexingEnabled = True
-
-
-hostName = "192.168.1.217"
-serverPort = 8081
-htDocsDir = "htdocs"
-defaultDocuments = ["index.py", "index.html"]
-page404s = ["404.py", "404.html"]
-types = [
-    ["py", "py"],
-    ["text/html", "html"]
-]
-defaultType = "text/plain"
-indexingEnabled = True
+indexingEnabled = False
 
 class PythonWebServer(BaseHTTPRequestHandler):
     def do_GET(self):
