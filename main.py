@@ -147,6 +147,7 @@ class PythonWebServer(BaseHTTPRequestHandler):
                     self.wfile.write(bytes("<html><head><title>404 Not Found</title></head><body bgcolor=\"white\"><center><h1>404 Not Found</h1></center><hr><center>Python</center></body></html>", "utf-8"))
 
     def do_POST(self):
+        GET = {}
         method = "POST"
         if os.path.isdir(htDocsDir + self.path):
             oldDefaultDocument = None
@@ -287,25 +288,25 @@ class PythonWebServer(BaseHTTPRequestHandler):
                         self.send_header("Content-Type", newContentType)
                         self.end_headers()
                         self.wfile.write(bytes(content, "utf-8"))
-            else:
-                old404Page = None
-                for new404Page in page404s:
-                    if os.path.isfile(htDocsDir + "/" + new404Page):
-                        old404Page = htDocsDir + "/" + new404Page
-                        break
-                if old404Page:
-                    file = open(old404Page, "r")
-                    content = file.read()
-                    file.close()
-                    self.send_response(404)
-                    self.send_header("Content-Type", "text/html")
-                    self.end_headers()
-                    self.wfile.write(bytes(content, "utf-8"))
                 else:
-                    self.send_response(404)
-                    self.send_header("Content-Type", "text/html")
-                    self.end_headers()
-                    self.wfile.write(bytes("<html><head><title>404 Not Found</title></head><body bgcolor=\"white\"><center><h1>404 Not Found</h1></center><hr><center>Python</center></body></html>", "utf-8"))
+                        old404Page = None
+                        for new404Page in page404s:
+                            if os.path.isfile(htDocsDir + "/" + new404Page):
+                                old404Page = htDocsDir + "/" + new404Page
+                                break
+                        if old404Page:
+                            file = open(old404Page, "r")
+                            content = file.read()
+                            file.close()
+                            self.send_response(404)
+                            self.send_header("Content-Type", "text/html")
+                            self.end_headers()
+                            self.wfile.write(bytes(content, "utf-8"))
+                        else:
+                            self.send_response(404)
+                            self.send_header("Content-Type", "text/html")
+                            self.end_headers()
+                            self.wfile.write(bytes("<html><head><title>404 Not Found</title></head><body bgcolor=\"white\"><center><h1>404 Not Found</h1></center><hr><center>Python</center></body></html>", "utf-8"))
                     
 if __name__ == "__main__":        
     webServer = HTTPServer((hostName, serverPort), PythonWebServer)
