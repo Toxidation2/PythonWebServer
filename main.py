@@ -78,7 +78,7 @@ class PythonWebServer(BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-Type", "text/html")
                     self.end_headers()
-                    self.wfile.write(bytes("<html><head><title>403 Forbidden</title></head><body><center><h1>403 Forbidden</h1></center><hr><center>Python</center></body></html>", "utf-8"))
+                    self.wfile.write(bytes("<html><head><title>403 Forbidden</title></head><body><center><h1>403 Forbidden</h1></center><hr><center>PythonWebServer/v1.0</center></body></html>", "utf-8"))
         else:
             if os.path.isfile(htDocsDir + self.path.split("?")[0]):
                 GET = {}
@@ -144,7 +144,7 @@ class PythonWebServer(BaseHTTPRequestHandler):
                     self.send_response(404)
                     self.send_header("Content-Type", "text/html")
                     self.end_headers()
-                    self.wfile.write(bytes("<html><head><title>404 Not Found</title></head><body bgcolor=\"white\"><center><h1>404 Not Found</h1></center><hr><center>Python</center></body></html>", "utf-8"))
+                    self.wfile.write(bytes("<html><head><title>404 Not Found</title></head><body bgcolor=\"white\"><center><h1>404 Not Found</h1></center><hr><center>PythonWebServer/v1.0</center></body></html>", "utf-8"))
 
     def do_POST(self):
         GET = {}
@@ -207,7 +207,7 @@ class PythonWebServer(BaseHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-Type", "text/html")
                     self.end_headers()
-                    self.wfile.write(bytes("<html><head><title>403 Forbidden</title></head><body><center><h1>403 Forbidden</h1></center><hr><center>Python</center></body></html>", "utf-8"))
+                    self.wfile.write(bytes("<html><head><title>403 Forbidden</title></head><body><center><h1>403 Forbidden</h1></center><hr><center>PythonWebServer/v1.0</center></body></html>", "utf-8"))
         else:
             if os.path.isfile(htDocsDir + self.path):
                 fileNameAndFileExtension = os.path.splitext(htDocsDir + self.path)
@@ -306,7 +306,7 @@ class PythonWebServer(BaseHTTPRequestHandler):
                             self.send_response(404)
                             self.send_header("Content-Type", "text/html")
                             self.end_headers()
-                            self.wfile.write(bytes("<html><head><title>404 Not Found</title></head><body bgcolor=\"white\"><center><h1>404 Not Found</h1></center><hr><center>Python</center></body></html>", "utf-8"))
+                            self.wfile.write(bytes("<html><head><title>404 Not Found</title></head><body bgcolor=\"white\"><center><h1>404 Not Found</h1></center><hr><center>PythonWebServer/v1.0</center></body></html>", "utf-8"))
                     
 if __name__ == "__main__":        
     webServer = HTTPServer((hostName, serverPort), PythonWebServer)
