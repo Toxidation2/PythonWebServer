@@ -2,6 +2,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from io import StringIO
 import sys
 import os
+import urllib
 
 hostName = "127.0.0.1"
 serverPort = 80
@@ -13,10 +14,24 @@ types = [
     ["text/html", "html"]
 ]
 defaultType = "text/plain"
-indexingEnabled = False
+indexingEnabled = True
 
-class MyServer(BaseHTTPRequestHandler):
+
+hostName = "192.168.1.217"
+serverPort = 8081
+htDocsDir = "htdocs"
+defaultDocuments = ["index.py", "index.html"]
+page404s = ["404.py", "404.html"]
+types = [
+    ["py", "py"],
+    ["text/html", "html"]
+]
+defaultType = "text/plain"
+indexingEnabled = True
+
+class PythonWebServer(BaseHTTPRequestHandler):
     def do_GET(self):
+        GET = {}
         method = "GET"
         if os.path.isdir(htDocsDir + self.path):
             oldDefaultDocument = None
@@ -37,13 +52,13 @@ class MyServer(BaseHTTPRequestHandler):
                         break
                 if newContentType[0:2] == "py":
                     old_stdout = sys.stdout
-                    sys.stdout = mystdout = StringIO()
+                    sys.stdout = stdout = StringIO()
                     file = open(oldDefaultDocument, "r")
                     content = file.read()
                     file.close()
                     exec(content)
                     sys.stdout = old_stdout
-                    content = mystdout.getvalue()
+                    content = stdout.getvalue()
                     self.send_response(200)
                     self.send_header("Content-Type", "text/html")
                     self.end_headers()
@@ -78,8 +93,22 @@ class MyServer(BaseHTTPRequestHandler):
                     self.end_headers()
                     self.wfile.write(bytes("<html><head><title>403 Forbidden</title></head><body><center><h1>403 Forbidden</h1></center><hr><center>Python</center></body></html>", "utf-8"))
         else:
-            if os.path.isfile(htDocsDir + self.path):
-                fileNameAndFileExtension = os.path.splitext(htDocsDir + self.path)
+            if os.path.isfile(htDocsDir + self.path.split("?")[0]):
+                GET = {}
+                for valueOne in self.path.split("?"):
+                    for valueTwo in valueOne.split("&"):
+                        indexOne = 0
+                        valueThree = ""
+                        valueFour = ""
+                        for valueFive in valueTwo.split("="):
+                            valueFive = urllib.parse.unquote(valueFive)
+                            indexOne = indexOne + 1
+                            if indexOne == 1:
+                                valueThree = valueFive
+                            elif indexOne == 2:
+                                valueFour = valueFive
+                        GET[valueThree] = valueFour
+                fileNameAndFileExtension = os.path.splitext(htDocsDir + self.path.split("?")[0])
                 newFileExtension = fileNameAndFileExtension[1]
                 newFileExtension = newFileExtension.replace(".", "")
                 newContentType = defaultType
@@ -91,19 +120,19 @@ class MyServer(BaseHTTPRequestHandler):
                         break
                 if newContentType[0:2] == "py":
                     old_stdout = sys.stdout
-                    sys.stdout = mystdout = StringIO()
-                    file = open(htDocsDir + self.path, "r")
+                    sys.stdout = stdout = StringIO()
+                    file = open(htDocsDir + self.path.split("?")[0], "r")
                     content = file.read()
                     file.close()
                     exec(content)
                     sys.stdout = old_stdout
-                    content = mystdout.getvalue()
+                    content = stdout.getvalue()
                     self.send_response(200)
                     self.send_header("Content-Type", "text/html")
                     self.end_headers()
                     self.wfile.write(bytes(content, "utf-8"))
                 else:
-                    file = open(htDocsDir + self.path, "r")
+                    file = open(htDocsDir + self.path.split("?")[0], "r")
                     content = file.read()
                     file.close()
                     self.send_response(200)
@@ -151,13 +180,13 @@ class MyServer(BaseHTTPRequestHandler):
                         break
                 if newContentType[0:2] == "py":
                     old_stdout = sys.stdout
-                    sys.stdout = mystdout = StringIO()
+                    sys.stdout = stdout = StringIO()
                     file = open(oldDefaultDocument, "r")
                     content = file.read()
                     file.close()
                     exec(content)
                     sys.stdout = old_stdout
-                    content = mystdout.getvalue()
+                    content = stdout.getvalue()
                     self.send_response(200)
                     self.send_header("Content-Type", "text/html")
                     self.end_headers()
@@ -205,13 +234,13 @@ class MyServer(BaseHTTPRequestHandler):
                         break
                 if newContentType[0:2] == "py":
                     old_stdout = sys.stdout
-                    sys.stdout = mystdout = StringIO()
+                    sys.stdout = stdout = StringIO()
                     file = open(htDocsDir + self.path, "r")
                     content = file.read()
                     file.close()
                     exec(content)
                     sys.stdout = old_stdout
-                    content = mystdout.getvalue()
+                    content = stdout.getvalue()
                     self.send_response(200)
                     self.send_header("Content-Type", "text/html")
                     self.end_headers()
@@ -224,6 +253,53 @@ class MyServer(BaseHTTPRequestHandler):
                     self.send_header("Content-Type", newContentType)
                     self.end_headers()
                     self.wfile.write(bytes(content, "utf-8"))
+            else:
+                if os.path.isfile(htDocsDir + self.path.split("?")[0]):
+                    GET = {}
+                    for valueOne in self.path.split("?"):
+                        for valueTwo in valueOne.split("&"):
+                            indexOne = 0
+                            valueThree = ""
+                            valueFour = ""
+                            for valueFive in valueTwo.split("="):
+                                valueFive = urllib.parse.unquote(valueFive)
+                                indexOne = indexOne + 1
+                                if indexOne == 1:
+                                    valueThree = valueFive
+                                elif indexOne == 2:
+                                    valueFour = valueFive
+                            GET[valueThree] = valueFour
+                    fileNameAndFileExtension = os.path.splitext(htDocsDir + self.path.split("?")[0])
+                    newFileExtension = fileNameAndFileExtension[1]
+                    newFileExtension = newFileExtension.replace(".", "")
+                    newContentType = defaultType
+                    for contentTypeAndFileExtension in types:
+                        oldContentType = contentTypeAndFileExtension[0]
+                        oldFileExtension = contentTypeAndFileExtension[1]
+                        if oldFileExtension == newFileExtension:
+                            newContentType = oldContentType
+                            break
+                    if newContentType[0:2] == "py":
+                        old_stdout = sys.stdout
+                        sys.stdout = stdout = StringIO()
+                        file = open(htDocsDir + self.path.split("?")[0], "r")
+                        content = file.read()
+                        file.close()
+                        exec(content)
+                        sys.stdout = old_stdout
+                        content = stdout.getvalue()
+                        self.send_response(200)
+                        self.send_header("Content-Type", "text/html")
+                        self.end_headers()
+                        self.wfile.write(bytes(content, "utf-8"))
+                    else:
+                        file = open(htDocsDir + self.path.split("?")[0], "r")
+                        content = file.read()
+                        file.close()
+                        self.send_response(200)
+                        self.send_header("Content-Type", newContentType)
+                        self.end_headers()
+                        self.wfile.write(bytes(content, "utf-8"))
             else:
                 old404Page = None
                 for new404Page in page404s:
@@ -245,7 +321,7 @@ class MyServer(BaseHTTPRequestHandler):
                     self.wfile.write(bytes("<html><head><title>404 Not Found</title></head><body bgcolor=\"white\"><center><h1>404 Not Found</h1></center><hr><center>Python</center></body></html>", "utf-8"))
                     
 if __name__ == "__main__":        
-    webServer = HTTPServer((hostName, serverPort), MyServer)
+    webServer = HTTPServer((hostName, serverPort), PythonWebServer)
 
     try:
         webServer.serve_forever()
@@ -253,4 +329,3 @@ if __name__ == "__main__":
         pass
 
     webServer.server_close()
-
