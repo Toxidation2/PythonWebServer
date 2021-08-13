@@ -11,4 +11,4 @@ Just run main.py and go to 127.0.0.1 in your browser of choice and you should se
 
 Here is a live demonstration of PythonWebServer. Want to set it up on your own? See above!
 
-https://unstable.pyweb.tox.dkay.xyz/
+http://toxidation2.ddns.net:8081/
